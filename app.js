@@ -792,7 +792,8 @@ function applyFilters() {
             'Gap SLA P90': gapP90,
             'Gap SLA P95': gapP95,
             'Status Validasi SLA P90': statusP90,
-            'Status Validasi SLA P95': statusP95
+            'Status Validasi SLA P95': statusP95,
+            'dayCounts': g.dayCounts // Save raw dayCounts for global percentile KPIs
         });
     }
 
@@ -826,30 +827,30 @@ function updateKpis() {
     
     let totalAwbVal = 0;
     let needsSlaAddition = 0;
+    let sumP95 = 0;
 
     filteredRoutes.forEach(route => {
         totalAwbVal += route['Total AWB'] || 0;
         if (route['Status Validasi SLA P95'] === 'Perlu Penambahan SLA') {
             needsSlaAddition++;
         }
+        sumP95 += route['P95 SLA Aktual'] || 0;
     });
 
-    const pctOverSla = totalRute > 0 ? (needsSlaAddition / totalRute * 100) : 0.0;
+    // Compute simple arithmetic average of P95 across all filtered routes (route-level average)
+    const avgP95 = totalRute > 0 ? (sumP95 / totalRute) : 0.0;
 
     kpiTotalRute.textContent = totalRute.toLocaleString('id-ID');
     kpiTotalAwb.textContent = totalAwbVal.toLocaleString('id-ID');
     kpiPerluPenambahan.textContent = needsSlaAddition.toLocaleString('id-ID');
-    kpiPctOverSla.textContent = pctOverSla.toFixed(2) + "%";
+    kpiPctOverSla.textContent = avgP95 > 0 ? `${avgP95.toFixed(1)} hari` : "0.0 hari";
 
-    // Warnings
+    // Warnings (only toggle on the warning count card now)
     const warningCard = kpiPerluPenambahan.closest('.kpi-card');
-    const pctWarningCard = kpiPctOverSla.closest('.kpi-card');
     if (needsSlaAddition > 0) {
         warningCard.classList.add('warning');
-        pctWarningCard.classList.add('warning');
     } else {
         warningCard.classList.remove('warning');
-        pctWarningCard.classList.remove('warning');
     }
 }
 
