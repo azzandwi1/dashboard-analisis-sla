@@ -395,30 +395,19 @@
                             <p style="margin: 0;">Dashboard ini membaca rute pada level <strong>TLC Asal → TLC Tujuan</strong>. Sementara SLA bisa tersimpan lebih detail pada level <strong>TLC Asal → Kecamatan Tujuan</strong>. Karena itu, ketika SLA diringkas ke level TLC tujuan, pendekatan yang dipakai adalah <em>weighted average</em> (rata-rata tertimbang) agar hasilnya tetap mewakili komposisi AWB per kecamatan.</p>
                         </div>
 
-                        <!-- Apa itu P90 dan P95 SLA Aktual -->
-                        <div style="background: rgba(255,255,255,0.02); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
-                            <strong style="color: var(--primary); display: block; margin-bottom: 6px;">2. Apa itu P90 dan P95 SLA Aktual?</strong>
-                            <ul style="padding-left: 18px; margin: 0 0 6px 0; list-style-type: disc; display: flex; flex-direction: column; gap: 4px;">
-                                <li><strong>P90 SLA Aktual</strong> adalah nilai SLA di mana <strong>90%</strong> pengiriman selesai pada atau sebelum angka itu.</li>
-                                <li><strong>P95 SLA Aktual</strong> adalah nilai SLA di mana <strong>95%</strong> pengiriman selesai pada atau sebelum angka itu.</li>
-                            </ul>
-                            <p style="margin: 0;"><em>Contoh Sederhana:</em> Jika P90 = <strong>3 hari</strong>, artinya 90 dari 100 pengiriman selesai maksimal 3 hari. Jika P95 = <strong>5 hari</strong>, artinya 95 dari 100 pengiriman selesai maksimal 5 hari.</p>
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                         <!-- Kenapa Memakai Weighted Average -->
                         <div style="background: rgba(255,255,255,0.02); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
                             <div>
-                                <strong style="color: var(--primary); display: block; margin-bottom: 6px;">3. Kenapa Memakai Weighted Average?</strong>
+                                <strong style="color: var(--primary); display: block; margin-bottom: 6px;">2. Kenapa Memakai Weighted Average?</strong>
                                 <p style="margin: 0 0 8px 0;">Dalam analisa ini, <em>weighted average</em> lebih representatif karena setiap kecamatan tujuan memiliki volume AWB yang berbeda. Kecamatan dengan volume kiriman besar seharusnya punya pengaruh lebih besar dibanding kecamatan dengan volume kecil.</p>
-                                <p style="margin: 0 0 8px 0;">Jika memakai rata-rata biasa, semua kecamatan dianggap sama besar, padahal kondisi operasional nyatanya tidak seperti itu.</p>
                             </div>
                             <code style="display: block; background-color: var(--bg-input); padding: 8px; border-radius: 6px; font-family: monospace; font-size: 0.8rem; border: 1px solid var(--border-color); color: var(--primary); text-align: center;">
                                 Weighted Average = Σ(nilai × bobot) / Σ(bobot)
                             </code>
                         </div>
+                    </div>
 
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                         <!-- Contoh Sederhana Perhitungan -->
                         <div style="background: var(--bg-input); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--primary);">
                             <strong style="color: var(--primary); display: block; margin-bottom: 4px;">Contoh Sederhana Perhitungan:</strong>
@@ -430,25 +419,23 @@
                             <p style="margin: 0 0 6px 0;"><strong>Rata-rata biasa:</strong> <code>(2 + 10) / 2 = 6 hari</code> (Hasil 6 hari ini menyesatkan, karena hampir semua kiriman sebenarnya menuju Kecamatan A yang SLA-nya 2 hari).</p>
                             <p style="margin: 0;"><strong>Weighted average:</strong> <code>((10.000 × 2) + (100 × 10)) / 10.100 = 2,08 hari</code> (Hasil 2,08 hari jauh lebih mencerminkan kondisi operasional sebenarnya).</p>
                         </div>
-                    </div>
 
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                         <!-- Kenapa Penting Untuk Analisa -->
                         <div style="background: rgba(255,255,255,0.02); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
-                            <strong style="color: var(--primary); display: block; margin-bottom: 6px;">4. Kenapa Penting Untuk Analisa SLA TLC?</strong>
+                            <strong style="color: var(--primary); display: block; margin-bottom: 6px;">3. Kenapa Penting Untuk Analisa SLA TLC?</strong>
                             <p style="margin: 0 0 6px 0;">Di dashboard ini, Anda membandingkan: <strong>SLA</strong> vs <strong>P90/P95 SLA Aktual</strong> pada level <strong>TLC Asal → TLC Tujuan</strong>.</p>
                             <p style="margin: 0 0 8px 0;">Sementara data SLA bisa berasal dari level yang lebih detail, misalnya TLC Asal -> Kecamatan Tujuan. Dalam satu area TLC tujuan bisa ada banyak kecamatan dengan SLA berbeda.</p>
                             <p style="margin: 0;"><strong>Jika menggunakan rata-rata biasa:</strong> <code>(2 + 2 + 2 + 7) / 4 = 3,25 hari</code> (kurang akurat).<br><strong>Jika menggunakan weighted average:</strong> <code>((5000×2) + (4000×2) + (3000×2) + (50×7)) / 12.050 = 2,02 hari</code> (lebih realistis untuk pembanding).</p>
                         </div>
-
-                        <!-- Kenapa Tidak Langsung Pakai SLA Max Terbesar -->
-                        <div style="background: rgba(255,255,255,0.02); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
-                            <strong style="color: var(--primary); display: block; margin-bottom: 6px;">5. Kenapa Tidak Langsung Pakai SLA Max Terbesar?</strong>
-                            <p style="margin: 0 0 8px 0;">Kalau langsung memakai SLA max terbesar dari seluruh kecamatan di bawah TLC tersebut, benchmark bisa jadi terlalu longgar.</p>
-                            <p style="margin: 0;">Misal satu TLC tujuan memiliki kecamatan dengan SLA: <code>2, 2, 2, 2, 7</code>.<br>
-                            Kalau benchmark yang dipakai hanya <strong>7</strong> (karena ada Kepulauan Seribu), maka P95 Aktual = <strong>5 hari</strong> akan terlihat masih aman ("SLA Masih Sesuai"). Padahal mayoritas area kecamatan (99% kiriman) sebenarnya berjalan dengan SLA 2 hari, yang berarti secara operasional pengiriman sudah sangat lambat.</p>
-                        </div>
                     </div>
+
+                    <!-- Kenapa Tidak Langsung Pakai SLA Max Terbesar -->
+                    <div style="background: rgba(255,255,255,0.02); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <strong style="color: var(--primary); display: block; margin-bottom: 6px;">4. Kenapa Tidak Langsung Pakai SLA Max Terbesar?</strong>
+                        <p style="margin: 0 0 8px 0;">Kalau langsung memakai SLA max terbesar dari seluruh kecamatan di bawah TLC tersebut, benchmark bisa jadi terlalu longgar.</p>
+                        <p style="margin: 0;">Misal satu TLC tujuan memiliki kecamatan dengan SLA: <code>2, 2, 2, 2, 7</code>.<br>
+                        Kalau benchmark yang dipakai hanya <strong>7</strong> (karena ada Kepulauan Seribu), maka P95 Aktual = <strong>5 hari</strong> akan terlihat masih aman ("SLA Masih Sesuai"). Padahal mayoritas area kecamatan (99% kiriman) sebenarnya berjalan dengan SLA 2 hari, yang berarti secara operasional pengiriman sudah sangat lambat.</p>
+                    </div>              </div>
                 </div>
             </section>
 
