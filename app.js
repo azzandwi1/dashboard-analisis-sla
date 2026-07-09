@@ -898,21 +898,21 @@ function renderChart() {
     );
     const xRange = [0, Math.ceil(maxVal * 1.1)]; // 10% padding, rounded up
 
-    // Hover texts
+    // Hover texts showing both percentiles for robust comparison
     const hoverTextP90 = chartData.map(row => 
         `<b>Rute:</b> ${row['TLC Asal']} (${row['CABANG UTAMA ASAL']}) → ${row['TLC Tujuan']} (${row['CABANG UTAMA TUJUAN']})<br>` +
         `<b>Total AWB:</b> ${row['Total AWB'].toLocaleString('id-ID')}<br>` +
         `<b>SLA Existing:</b> ${row['Weighted Avg SLA Min']} - ${row['Weighted Avg SLA Max']} hari<br>` +
-        `<b>P90 Aktual:</b> ${row['P90 SLA Aktual']} hari (Gap: ${row['Gap SLA P90'].toFixed(1)} hari)<br>` +
-        `<b>Status P90:</b> ${row['Status Validasi SLA P90']}`
+        `<b>P90 Aktual:</b> ${row['P90 SLA Aktual']} hari (Gap: ${row['Gap SLA P90'].toFixed(1)} hari) [${row['Status Validasi SLA P90']}]<br>` +
+        `<b>P95 Aktual:</b> ${row['P95 SLA Aktual']} hari (Gap: ${row['Gap SLA P95'].toFixed(1)} hari) [${row['Status Validasi SLA P95']}]`
     );
 
     const hoverTextP95 = chartData.map(row => 
         `<b>Rute:</b> ${row['TLC Asal']} (${row['CABANG UTAMA ASAL']}) → ${row['TLC Tujuan']} (${row['CABANG UTAMA TUJUAN']})<br>` +
         `<b>Total AWB:</b> ${row['Total AWB'].toLocaleString('id-ID')}<br>` +
         `<b>SLA Existing:</b> ${row['Weighted Avg SLA Min']} - ${row['Weighted Avg SLA Max']} hari<br>` +
-        `<b>P95 Aktual:</b> ${row['P95 SLA Aktual']} hari (Gap: ${row['Gap SLA P95'].toFixed(1)} hari)<br>` +
-        `<b>Status P95:</b> ${row['Status Validasi SLA P95']}`
+        `<b>P90 Aktual:</b> ${row['P90 SLA Aktual']} hari (Gap: ${row['Gap SLA P90'].toFixed(1)} hari) [${row['Status Validasi SLA P90']}]<br>` +
+        `<b>P95 Aktual:</b> ${row['P95 SLA Aktual']} hari (Gap: ${row['Gap SLA P95'].toFixed(1)} hari) [${row['Status Validasi SLA P95']}]`
     );
 
     // Plotly traces
@@ -941,11 +941,11 @@ function renderChart() {
         mode: 'markers',
         marker: {
             color: '#10b981', // Standard green for P90
-            size: 10,
+            size: 14, // Larger size to prevent being hidden under P95
             symbol: 'circle',
             line: {
                 color: '#ffffff',
-                width: 1
+                width: 1.5
             }
         },
         name: 'P90 SLA Aktual (Weighted)',
@@ -969,7 +969,7 @@ function renderChart() {
         mode: 'markers',
         marker: {
             color: '#EE6825', // Brand Accent Orange for P95 (Warning/Alert)
-            size: 10,
+            size: 8, // Smaller size so it sits neatly inside the P90 circle if equal
             symbol: 'diamond',
             line: {
                 color: '#ffffff',
