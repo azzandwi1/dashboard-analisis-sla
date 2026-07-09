@@ -291,6 +291,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Toggle Sidebar handler (Desktop collapse)
+    const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
+    if (toggleSidebarBtn) {
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            // Trigger Plotly relayout to fill the new space
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+            }, 300); // match transition duration
+        });
+    }
+
     // Collapsible Notes Handler
     const notesToggleBar = document.getElementById('notes-toggle-bar');
     const notesContent = document.getElementById('notes-content');
