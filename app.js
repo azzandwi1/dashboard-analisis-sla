@@ -295,7 +295,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
     if (toggleSidebarBtn) {
         toggleSidebarBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
+            const isCollapsed = sidebar.classList.toggle('collapsed');
+            if (isCollapsed) {
+                toggleSidebarBtn.style.left = '20px';
+                const svg = toggleSidebarBtn.querySelector('svg');
+                if (svg) svg.style.transform = 'rotate(180deg)';
+            } else {
+                toggleSidebarBtn.style.left = '-15px';
+                const svg = toggleSidebarBtn.querySelector('svg');
+                if (svg) svg.style.transform = 'rotate(0deg)';
+            }
             // Trigger Plotly relayout to fill the new space
             setTimeout(() => {
                 window.dispatchEvent(new Event('resize'));

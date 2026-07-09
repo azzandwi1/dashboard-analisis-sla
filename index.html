@@ -349,8 +349,8 @@
         <!-- Main Dashboard Panel -->
         <main class="main-panel" style="position: relative;">
             <!-- Premium Sidebar Toggle Button -->
-            <button id="toggle-sidebar-btn" class="toggle-sidebar-btn-premium" aria-label="Toggle filter sidebar">
-                <svg style="width: 16px; height: 16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+            <button id="toggle-sidebar-btn" class="toggle-sidebar-btn-premium" aria-label="Toggle filter sidebar" style="position: absolute; top: 24px; left: -15px; width: 30px; height: 30px; border-radius: 50%; background-color: var(--bg-card); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; color: var(--text-primary); transition: left var(--transition-normal) ease, background-color var(--transition-fast) ease, border-color var(--transition-fast) ease;">
+                <svg style="width: 16px; height: 16px; transition: transform var(--transition-normal) ease;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                 </svg>
             </button>
@@ -364,7 +364,7 @@
             </div>
 
             <!-- Panduan Membaca Dashboard (User Guide) -->
-            <section class="visual-card" style="margin-bottom: 24px; padding: 16px 20px; border-left: 5px solid var(--primary); background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-input) 100%);">
+            <section class="visual-card" style="margin-bottom: 24px; padding: 16px 20px; border-left: 5px solid var(--primary); background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-input) 100%); min-height: auto !important; gap: 0;">
                 <div id="guide-toggle-bar" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;">
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <svg style="width: 20px; height: 20px; color: var(--primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
