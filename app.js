@@ -11,6 +11,7 @@ const loadingProgress = document.querySelector('.loading-progress');
 const body = document.body;
 
 // Multiselect Instances
+let msTahunBulan;
 let msRegionAsal, msCabangAsal, msTlcAsal;
 let msRegionTujuan, msCabangTujuan, msTlcTujuan;
 let msTipeKiriman, msJenisKiriman, msService, msStatusP95;
@@ -46,6 +47,7 @@ const exportCsvBtn = document.getElementById('export-csv-btn');
 // Global Unique Mappings
 let originHierarchy = {};
 let destHierarchy = {};
+let uniqueTahunBulan = new Set();
 let uniqueServices = new Set();
 let uniqueTipeKiriman = new Set();
 let uniqueJenisKiriman = new Set();
@@ -371,6 +373,7 @@ function setupFilters() {
         if (!destHierarchy[regT][cabT]) destHierarchy[regT][cabT] = new Set();
         destHierarchy[regT][cabT].add(tlcT);
 
+        if (row['Tahun_Bulan']) uniqueTahunBulan.add(row['Tahun_Bulan']);
         if (row['Service']) uniqueServices.add(row['Service']);
         if (row['Tipe Kiriman']) uniqueTipeKiriman.add(row['Tipe Kiriman']);
         if (row['Jenis Kiriman']) uniqueJenisKiriman.add(row['Jenis Kiriman']);
@@ -378,6 +381,7 @@ function setupFilters() {
     });
 
     // 2. Initialize Multiselect Dropdowns
+    msTahunBulan = new MultiselectDropdown('ms-tahun-bulan', 'Choose Months', applyFilters);
     msRegionAsal = new MultiselectDropdown('ms-region-asal', 'Choose Regions', () => {
         updateCabangAsalOptions();
         applyFilters();
@@ -404,6 +408,7 @@ function setupFilters() {
     msStatusP95 = new MultiselectDropdown('ms-status-p95', 'Choose Statuses', applyFilters);
 
     // 3. Populate Multiselects
+    msTahunBulan.setOptions(Array.from(uniqueTahunBulan).sort());
     msRegionAsal.setOptions(Object.keys(originHierarchy).sort());
     msRegionTujuan.setOptions(Object.keys(destHierarchy).sort());
     msTipeKiriman.setOptions(Array.from(uniqueTipeKiriman).sort());
@@ -588,6 +593,7 @@ function renderCustomerTags() {
 
 // Reset filters
 function resetAllFilters() {
+    msTahunBulan.clear();
     msRegionAsal.clear();
     updateCabangAsalOptions();
     
@@ -669,6 +675,7 @@ function calculatePercentile(dayCounts, p) {
 // CORE ROUTE AGGREGATION & HISTOGRAM SUMMING
 function applyFilters() {
     // 1. Get raw filters
+    const selTahunBulan = msTahunBulan.getSelected();
     const selRegionsA = msRegionAsal.getSelected();
     const selCabangsA = msCabangAsal.getSelected();
     const selTlcsA = msTlcAsal.getSelected();
@@ -685,6 +692,9 @@ function applyFilters() {
 
     // 2. Filter raw records
     const matchingRawRows = rawData.filter(row => {
+        // Year Month filter
+        if (selTahunBulan.length > 0 && !selTahunBulan.includes(row['Tahun_Bulan'])) return false;
+
         // Origin filters
         if (selRegionsA.length > 0 && !selRegionsA.includes(row['REGION ASAL'])) return false;
         if (selCabangsA.length > 0 && !selCabangsA.includes(row['CABANG UTAMA ASAL'])) return false;

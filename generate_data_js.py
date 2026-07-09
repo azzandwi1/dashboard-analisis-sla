@@ -9,9 +9,8 @@ import os
 excel_path = "Percentile Achievement New.xlsx"
 js_path = "data.js"
 
-# If you add a new column/dimension to your PivotTables, update this count.
-# Currently, there are 10 dimensions.
-NUM_DIMENSIONS = 10 
+# Currently, there are 11 dimensions.
+NUM_DIMENSIONS = 11 
 
 def main():
     if not os.path.exists(excel_path):
