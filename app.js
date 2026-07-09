@@ -1232,7 +1232,52 @@ function exportAggregatedDataToCSV() {
         "Status Validasi SLA P90", "Status Validasi SLA P95"
     ];
 
-    let csvContent = "\ufeff" + headers.join(",") + "\n";
+    // Helper to format array selections safely for CSV values
+    const formatFilterValue = (selectedArr) => {
+        if (selectedArr.length === 0) return "Semua";
+        let valStr = selectedArr.join("; ");
+        if (valStr.includes(",") || valStr.includes('"') || valStr.includes("\n")) {
+            valStr = '"' + valStr.replace(/"/g, '""') + '"';
+        }
+        return valStr;
+    };
+
+    const getSortText = (val) => {
+        if (val === 'awb_desc') return "Total AWB terbesar";
+        if (val === 'gap95_desc') return "Gap SLA P95 terbesar";
+        if (val === 'p95_desc') return "P95 SLA Aktual terbesar";
+        if (val === 'awb_asc') return "Total AWB terkecil";
+        return val;
+    };
+
+    let csvContent = "\ufeff";
+    csvContent += `FILTER YANG DITERAPKAN,\n`;
+    csvContent += `Tahun Bulan,${formatFilterValue(msTahunBulan.getSelected())}\n`;
+    csvContent += `Region Asal,${formatFilterValue(msRegionAsal.getSelected())}\n`;
+    csvContent += `Cabang Utama Asal,${formatFilterValue(msCabangAsal.getSelected())}\n`;
+    csvContent += `TLC Asal,${formatFilterValue(msTlcAsal.getSelected())}\n`;
+    csvContent += `Region Tujuan,${formatFilterValue(msRegionTujuan.getSelected())}\n`;
+    csvContent += `Cabang Utama Tujuan,${formatFilterValue(msCabangTujuan.getSelected())}\n`;
+    csvContent += `TLC Tujuan,${formatFilterValue(msTlcTujuan.getSelected())}\n`;
+    csvContent += `Tipe Kiriman,${formatFilterValue(msTipeKiriman.getSelected())}\n`;
+    csvContent += `Jenis Kiriman,${formatFilterValue(msJenisKiriman.getSelected())}\n`;
+    csvContent += `Service Layanan,${formatFilterValue(msService.getSelected())}\n`;
+    
+    let customerVal = "Semua";
+    if (selectedCustomers.length > 0) {
+        let custStr = selectedCustomers.join("; ");
+        if (custStr.includes(",") || custStr.includes('"') || custStr.includes("\n")) {
+            custStr = '"' + custStr.replace(/"/g, '""') + '"';
+        }
+        customerVal = custStr;
+    }
+    csvContent += `Nama Pelanggan,${customerVal}\n`;
+    csvContent += `Status Validasi SLA P95,${formatFilterValue(msStatusP95.getSelected())}\n`;
+    csvContent += `Minimal Total AWB,${filterMinAwb.value}\n`;
+    csvContent += `Urutkan Berdasarkan,${getSortText(sortSelect.value)}\n`;
+    csvContent += `\n`; // Empty row separator
+    
+    csvContent += headers.join(",") + "\n";
 
     filteredRoutes.forEach(row => {
         const rowData = [
