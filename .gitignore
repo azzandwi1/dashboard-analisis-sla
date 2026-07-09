@@ -1,0 +1,5 @@
+# Ignore large raw data files
+*.xlsx
+*.csv
+~$*
+.DS_Store

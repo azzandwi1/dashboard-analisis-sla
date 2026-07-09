@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLA Percentile Achievement Dashboard - SAP Express</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Dependencies via CDN (jsDelivr) -->
+    <!-- Decompression Library (fflate) -->
+    <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
+    
+    <!-- CSV Parser (PapaParse) -->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    
+    <!-- Interactive Charts (Plotly.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.30.0/plotly.min.js"></script>
+</head>
+<body>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">SLA Percentile Dashboard</div>
+        <div class="loading-progress">Menyiapkan aset halaman...</div>
+    </div>
+
+    <div class="app-container">
+        <!-- Mobile Header (Visible only on mobile screen widths) -->
+        <div class="mobile-header">
+            <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open filter menu">
+                <svg style="width: 24px; height: 24px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+            <img src="sap-express-logo.svg" alt="SAP Express Logo" style="height: 32px; object-fit: contain;">
+            <div style="width: 40px;"></div> <!-- Spacer to balance layout -->
+        </div>
+
+        <!-- Sidebar Filters -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <img class="logo-image" src="sap-express-logo.svg" alt="SAP Express Logo">
+                </div>
+                <button id="reset-filters-btn" class="reset-btn">Reset</button>
+            </div>
+
+            <div class="sidebar-content">
+                <!-- Rute Asal Group -->
+                <div class="filter-group">
+                    <span class="filter-label">RUTE ASAL (REGION)</span>
+                    <div class="multiselect-container" id="ms-region-asal">
+                        <div class="multiselect-trigger">
+                            <span class="multiselect-value">Choose options</span>
+                            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </div>
+                        <div class="multiselect-dropdown">
+                            <div class="multiselect-search-container">
+                                <input type="text" class="multiselect-search" placeholder="Cari Region...">
+                            </div>
+                            <div class="multiselect-actions">
+                                <button class="ms-btn select-all">All</button>
+                                <button class="ms-btn clear-all">Clear</button>
+                            </div>
+                            <div class="multiselect-options"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-group nested">
+                    <div class="filter-group">
+                        <span class="filter-label" style="font-size:0.75rem;">Cabang Utama Asal</span>
+                        <div class="multiselect-container" id="ms-cabang-asal">
+                            <div class="multiselect-trigger disabled">
+                                <span class="multiselect-value">Choose options</span>
+                                <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </div>
+                            <div class="multiselect-dropdown">
+                                <div class="multiselect-search-container">
+                                    <input type="text" class="multiselect-search" placeholder="Cari Cabang...">
+                                </div>
+                                <div class="multiselect-actions">
+                                    <button class="ms-btn select-all">All</button>
+                                    <button class="ms-btn clear-all">Clear</button>
+                                </div>
+                                <div class="multiselect-options"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label" style="font-size:0.75rem;">TLC Asal</span>
+                        <div class="multiselect-container" id="ms-tlc-asal">
+                            <div class="multiselect-trigger disabled">
+                                <span class="multiselect-value">Choose options</span>
+                                <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </div>
+                            <div class="multiselect-dropdown">
+                                <div class="multiselect-search-container">
+                                    <input type="text" class="multiselect-search" placeholder="Cari TLC...">
+                                </div>
+                                <div class="multiselect-actions">
+                                    <button class="ms-btn select-all">All</button>
+                                    <button class="ms-btn clear-all">Clear</button>
+                                </div>
+                                <div class="multiselect-options"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rute Tujuan Group -->
+                <div class="filter-group" style="margin-top:8px;">
+                    <span class="filter-label">RUTE TUJUAN (REGION)</span>
+                    <div class="multiselect-container" id="ms-region-tujuan">
+                        <div class="multiselect-trigger">
+                            <span class="multiselect-value">Choose options</span>
+                            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </div>
+                        <div class="multiselect-dropdown">
+                            <div class="multiselect-search-container">
+                                <input type="text" class="multiselect-search" placeholder="Cari Region...">
+                            </div>
+                            <div class="multiselect-actions">
+                                <button class="ms-btn select-all">All</button>
+                                <button class="ms-btn clear-all">Clear</button>
+                            </div>
+                            <div class="multiselect-options"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-group nested">
+                    <div class="filter-group">
+                        <span class="filter-label" style="font-size:0.75rem;">Cabang Utama Tujuan</span>
+                        <div class="multiselect-container" id="ms-cabang-tujuan">
+                            <div class="multiselect-trigger disabled">
+                                <span class="multiselect-value">Choose options</span>
+                                <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </div>
+                            <div class="multiselect-dropdown">
+                                <div class="multiselect-search-container">
+                                    <input type="text" class="multiselect-search" placeholder="Cari Cabang...">
+                                </div>
+                                <div class="multiselect-actions">
+                                    <button class="ms-btn select-all">All</button>
+                                    <button class="ms-btn clear-all">Clear</button>
+                                </div>
+                                <div class="multiselect-options"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label" style="font-size:0.75rem;">TLC Tujuan</span>
+                        <div class="multiselect-container" id="ms-tlc-tujuan">
+                            <div class="multiselect-trigger disabled">
+                                <span class="multiselect-value">Choose options</span>
+                                <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </div>
+                            <div class="multiselect-dropdown">
+                                <div class="multiselect-search-container">
+                                    <input type="text" class="multiselect-search" placeholder="Cari TLC...">
+                                </div>
+                                <div class="multiselect-actions">
+                                    <button class="ms-btn select-all">All</button>
+                                    <button class="ms-btn clear-all">Clear</button>
+                                </div>
+                                <div class="multiselect-options"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tipe Kiriman -->
+                <div class="filter-group" style="margin-top:8px;">
+                    <span class="filter-label">TIPE KIRIMAN</span>
+                    <div class="multiselect-container" id="ms-tipe-kiriman">
+                        <div class="multiselect-trigger">
+                            <span class="multiselect-value">Choose options</span>
+                            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </div>
+                        <div class="multiselect-dropdown">
+                            <div class="multiselect-search-container">
+                                <input type="text" class="multiselect-search" placeholder="Cari tipe...">
+                            </div>
+                            <div class="multiselect-actions">
+                                <button class="ms-btn select-all">All</button>
+                                <button class="ms-btn clear-all">Clear</button>
+                            </div>
+                            <div class="multiselect-options"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service -->
+                <div class="filter-group">
+                    <span class="filter-label">SERVICE LAYANAN</span>
+                    <div class="multiselect-container" id="ms-service">
+                        <div class="multiselect-trigger">
+                            <span class="multiselect-value">Choose options</span>
+                            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </div>
+                        <div class="multiselect-dropdown">
+                            <div class="multiselect-search-container">
+                                <input type="text" class="multiselect-search" placeholder="Cari layanan...">
+                            </div>
+                            <div class="multiselect-actions">
+                                <button class="ms-btn select-all">All</button>
+                                <button class="ms-btn clear-all">Clear</button>
+                            </div>
+                            <div class="multiselect-options"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Search with Tags -->
+                <div class="filter-group">
+                    <span class="filter-label">NAMA PELANGGAN</span>
+                    <div class="tags-input-container">
+                        <div class="tags-wrapper" id="customer-tags-container"></div>
+                        <div class="autocomplete-wrapper">
+                            <input type="text" id="filter-pelanggan" class="filter-control" placeholder="Ketik & pilih nama pelanggan..." list="pelanggan-list">
+                            <datalist id="pelanggan-list"></datalist>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLA Status Filter -->
+                <div class="filter-group">
+                    <span class="filter-label">Status Validasi SLA P95</span>
+                    <div class="multiselect-container" id="ms-status-p95">
+                        <div class="multiselect-trigger">
+                            <span class="multiselect-value">Choose options</span>
+                            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </div>
+                        <div class="multiselect-dropdown">
+                            <div class="multiselect-search-container">
+                                <input type="text" class="multiselect-search" placeholder="Cari status...">
+                            </div>
+                            <div class="multiselect-actions">
+                                <button class="ms-btn select-all">All</button>
+                                <button class="ms-btn clear-all">Clear</button>
+                            </div>
+                            <div class="multiselect-options"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Minimal AWB Slider -->
+                <div class="filter-group">
+                    <span class="filter-label">
+                        Minimal Total AWB
+                        <span id="range-min-awb-val" class="range-val">0</span>
+                    </span>
+                    <div class="range-container">
+                        <input type="range" id="filter-min-awb" class="range-input" min="0" max="2000" step="10" value="0">
+                    </div>
+                </div>
+
+                <!-- Sort Order -->
+                <div class="filter-group">
+                    <span class="filter-label">URUTKAN BERDASARKAN</span>
+                    <select id="sort-select" class="filter-control">
+                        <option value="awb_desc">Total AWB terbesar</option>
+                        <option value="gap95_desc">Gap P95 terbesar</option>
+                        <option value="p95_desc">P95 SLA Aktual terbesar</option>
+                        <option value="awb_asc">Total AWB terkecil</option>
+                    </select>
+                </div>
+
+                <!-- Limit Routes Displayed -->
+                <div class="filter-group">
+                    <span class="filter-label">
+                        Jumlah Rute Grafik
+                        <span id="range-limit-val" class="range-val">15</span>
+                    </span>
+                    <div class="range-container">
+                        <input type="range" id="limit-select" class="range-input" min="5" max="100" step="5" value="15">
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard Panel -->
+        <main class="main-panel">
+            <!-- Header bar -->
+            <div class="top-bar">
+                <div>
+                    <h1 class="dashboard-title">Dashboard Analisis SLA</h1>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">Tingkat Detail Rute: TLC Asal → TLC Tujuan (Agregat Rute)</p>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <section class="kpi-grid">
+                <!-- KPI 1: Total Rute -->
+                <div class="kpi-card highlight">
+                    <div class="kpi-header">
+                        <span>TOTAL RUTE</span>
+                        <svg class="kpi-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+                        </svg>
+                    </div>
+                    <div id="kpi-total-rute" class="kpi-value">0</div>
+                    <div class="kpi-footer">Rute unik terfilter (TLC → TLC)</div>
+                </div>
+
+                <!-- KPI 2: Total AWB -->
+                <div class="kpi-card highlight">
+                    <div class="kpi-header">
+                        <span>TOTAL AWB</span>
+                        <svg class="kpi-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                        </svg>
+                    </div>
+                    <div id="kpi-total-awb" class="kpi-value">0</div>
+                    <div class="kpi-footer">Total volume pengiriman terfilter</div>
+                </div>
+
+                <!-- KPI 3: Rute Over SLA (P95) -->
+                <div class="kpi-card warning">
+                    <div class="kpi-header">
+                        <span>RUTE OVER SLA (P95)</span>
+                        <svg class="kpi-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                    </div>
+                    <div id="kpi-perlu-penambahan" class="kpi-value">0</div>
+                    <div class="kpi-footer">Rute berstatus: Perlu Penambahan SLA</div>
+                </div>
+
+                <!-- KPI 4: % Rute Over SLA -->
+                <div class="kpi-card warning">
+                    <div class="kpi-header">
+                        <span>% RUTE OVER SLA (P95)</span>
+                        <svg class="kpi-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
+                        </svg>
+                    </div>
+                    <div id="kpi-pct-over-sla" class="kpi-value">0.00%</div>
+                    <div class="kpi-footer">Persentase rute terfilter yang terlambat</div>
+                </div>
+            </section>
+
+            <!-- Chart Card -->
+            <section class="visual-card">
+                <div class="card-title-bar">
+                    <h2 class="card-title">Perbandingan SLA Existing vs SLA Aktual Agregat (P90 & P95)</h2>
+                    <span style="color:var(--text-muted); font-size:0.8rem;">Menampilkan top rute terurut (TLC Asal → TLC Tujuan)</span>
+                </div>
+                <!-- Custom HTML Legend (Always visible, does not scroll) -->
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="legend-color range"></span>
+                        <span>Rentang SLA Existing</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color p90"></span>
+                        <span>P90 SLA Aktual (Weighted)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color p95"></span>
+                        <span>P95 SLA Aktual (Weighted)</span>
+                    </div>
+                </div>
+                <div class="chart-scroll-container">
+                    <div id="sla-chart" class="chart-container"></div>
+                </div>
+                <!-- Fixed Bottom X-Axis Ticks (Does not scroll) -->
+                <div id="sla-chart-xaxis" style="height: 50px; width: 100%; margin-top: -10px; flex-shrink: 0;"></div>
+            </section>
+
+            <!-- Table Card -->
+            <section class="table-card">
+                <div class="table-controls">
+                    <h2 class="card-title">Data Detail Pencapaian Persentil SLA (Agregat TLC)</h2>
+                    
+                    <div style="display:flex; gap:12px; align-items:center; width:100%; max-width:600px; justify-content:flex-end;">
+                        <!-- Table Search -->
+                        <div class="search-container">
+                            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.637 10.637Z" />
+                            </svg>
+                            <input type="text" id="search-table" class="search-input" placeholder="Cari rute, cabang, atau region...">
+                        </div>
+                        
+                        <!-- Export Button -->
+                        <div class="action-buttons">
+                            <button id="export-csv-btn" class="btn primary">
+                                <svg style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                </svg>
+                                Ekspor CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Wrapper -->
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>REGION ASAL</th>
+                                <th>CABANG UTAMA ASAL</th>
+                                <th>TLC Asal</th>
+                                <th>REGION TUJUAN</th>
+                                <th>CABANG UTAMA TUJUAN</th>
+                                <th>TLC Tujuan</th>
+                                <th style="text-align:right;">Total AWB</th>
+                                <th style="text-align:center;">SLA Min Existing</th>
+                                <th style="text-align:center;">SLA Max Existing</th>
+                                <th style="text-align:center;">P90 SLA Aktual</th>
+                                <th style="text-align:center;">P95 SLA Aktual</th>
+                                <th style="text-align:center;">Gap SLA P90</th>
+                                <th style="text-align:center;">Gap SLA P95</th>
+                                <th>Validasi SLA P90</th>
+                                <th>Validasi SLA P95</th>
+                            </tr>
+                        </thead>
+                        <tbody id="data-table-body">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Footer -->
+                <div class="pagination-container">
+                    <div id="table-info">Showing 0 to 0 of 0 entries</div>
+                    <div id="pagination-buttons" class="pagination-buttons"></div>
+                </div>
+            </section>
+
+            <!-- Notes & Methodology Card (Collapsible) -->
+            <section class="table-card notes-card" style="margin-top: 8px;">
+                <div class="card-title-bar" style="cursor: pointer;" id="notes-toggle-bar">
+                    <h2 class="card-title" style="display: flex; align-items: center; gap: 8px;">
+                        <svg style="width: 20px; height: 20px; color: var(--primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 1 1 1.063 1.063L12 12.75 11.25 13.5m0-6H12m10.5 4.5a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        Catatan Metodologi: P90, P95 & Weighted Average
+                    </h2>
+                    <span id="notes-toggle-icon" style="font-weight: 600; color: var(--primary); font-size: 0.9rem; transition: transform var(--transition-fast); user-select: none;">[ Buka ]</span>
+                </div>
+                <div id="notes-content" style="display: none; flex-direction: column; gap: 16px; margin-top: 12px; border-top: 1px solid var(--border-color); padding-top: 16px; font-size: 0.875rem; line-height: 1.6; color: var(--text-secondary);">
+                    
+                    <div>
+                        <strong style="color: var(--primary);">1. Disclaimer Rute TLC</strong>
+                        <p style="margin-top: 4px;">Dashboard ini membaca rute pada level <strong>TLC Asal → TLC Tujuan</strong>. Sementara SLA existing bisa tersimpan lebih detail pada level <strong>TLC Asal → Kecamatan Tujuan</strong>. Karena itu, ketika SLA existing diringkas ke level TLC tujuan, pendekatan yang dipakai adalah <em>weighted average</em> (rata-rata tertimbang) agar hasilnya tetap mewakili komposisi AWB per kecamatan.</p>
+                    </div>
+
+                    <div>
+                        <strong style="color: var(--primary);">2. Apa itu P90 dan P95 SLA Aktual?</strong>
+                        <ul style="margin-top: 4px; padding-left: 20px; list-style-type: disc;">
+                            <li><strong>P90 SLA Aktual</strong> adalah nilai SLA di mana 90% pengiriman selesai pada atau sebelum angka itu.</li>
+                            <li><strong>P95 SLA Aktual</strong> adalah nilai SLA di mana 95% pengiriman selesai pada atau sebelum angka itu.</li>
+                        </ul>
+                        <p style="margin-top: 6px;"><em>Contoh sederhana:</em> Jika P90 = 3 hari, artinya 90 dari 100 pengiriman selesai maksimal 3 hari. Jika P95 = 5 hari, artinya 95 dari 100 pengiriman selesai maksimal 5 hari.</p>
+                    </div>
+
+                    <div>
+                        <strong style="color: var(--primary);">3. Kenapa Memakai Weighted Average (Rata-rata Tertimbang)?</strong>
+                        <p style="margin-top: 4px;">Dalam analisa ini, <em>weighted average</em> lebih representatif daripada rata-rata biasa (<em>simple average</em>), karena setiap kecamatan tujuan memiliki volume AWB yang berbeda. Kecamatan dengan volume kiriman besar seharusnya punya pengaruh lebih besar dibanding kecamatan dengan volume kecil.</p>
+                        <p style="margin-top: 4px;">Jika memakai rata-rata biasa, semua kecamatan dianggap sama besar, padahal kondisi operasional nyatanya tidak seperti itu.</p>
+                        
+                        <p style="margin-top: 8px; font-weight: 500; color: var(--text-primary);">Rumus Weighted Average:</p>
+                        <code style="display: block; background-color: var(--bg-input); padding: 8px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; margin-top: 4px; border: 1px solid var(--border-color); color: var(--primary);">
+                            Weighted Average = Σ(nilai × bobot) / Σ(bobot)
+                        </code>
+                        <p style="margin-top: 4px;">Di dashboard ini, bobot yang dipakai adalah <strong>Total AWB</strong>.</p>
+                    </div>
+
+                    <div style="background-color: var(--bg-input); padding: 16px; border-radius: 8px; border-left: 4px solid var(--primary);">
+                        <strong style="color: var(--primary);">Contoh Sederhana Perhitungan:</strong>
+                        <p style="margin-top: 6px;">Misal ada 2 kecamatan tujuan di bawah 1 TLC Tujuan:</p>
+                        <ul style="padding-left: 20px; margin-top: 4px; list-style-type: circle;">
+                            <li>Kecamatan A: AWB = 10.000, Max SLA = 2 hari</li>
+                            <li>Kecamatan B: AWB = 100, Max SLA = 10 hari</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Jika menggunakan rata-rata biasa:</strong><br>
+                        <code>(2 + 10) / 2 = 6 hari</code><br>
+                        <span style="color: var(--accent); font-weight: 500;">Hasil 6 hari ini menyesatkan</span>, karena hampir semua kiriman (99%) sebenarnya menuju Kecamatan A yang SLA-nya hanya 2 hari.</p>
+                        
+                        <p style="margin-top: 8px;"><strong>Jika menggunakan weighted average (rata-rata tertimbang):</strong><br>
+                        <code>((10.000 × 2) + (100 × 10)) / (10.000 + 100) = 21.000 / 10.100 = 2,08 hari</code><br>
+                        Hasil <strong>2,08 hari</strong> jauh lebih mencerminkan kondisi operasional sebenarnya.</p>
+                    </div>
+
+                    <div>
+                        <strong style="color: var(--primary);">4. Kenapa Penting Untuk Analisa SLA TLC?</strong>
+                        <p style="margin-top: 4px;">Di dashboard ini, Anda membandingkan: <strong>SLA Existing</strong> vs <strong>P90/P95 SLA Aktual</strong> pada level <strong>TLC Asal → TLC Tujuan</strong>.</p>
+                        <p style="margin-top: 4px;">Sementara data SLA existing bisa berasal dari level yang lebih detail, misalnya TLC Asal → Kecamatan Tujuan. Dalam satu area TLC tujuan bisa ada banyak kecamatan dengan SLA berbeda.</p>
+                        
+                        <p style="margin-top: 8px; font-weight: 500; color: var(--text-primary);">Contoh Kasus Rute TLC:</p>
+                        <p style="margin-top: 4px;">Di bawah TLC Jakarta Barat (TLC tujuan yang sama), terdapat beberapa kecamatan tujuan:</p>
+                        <ul style="padding-left: 20px; list-style-type: square;">
+                            <li>Kecamatan Cengkareng: AWB = 5.000, Max SLA = 2 hari</li>
+                            <li>Kecamatan Kalideres: AWB = 4.000, Max SLA = 2 hari</li>
+                            <li>Kecamatan Kapuk: AWB = 3.000, Max SLA = 2 hari</li>
+                            <li>Kecamatan Kepulauan Seribu: AWB = 50, Max SLA = 7 hari</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Jika menggunakan rata-rata biasa:</strong><br>
+                        <code>(2 + 2 + 2 + 7) / 4 = 3,25 hari</code> (kurang akurat karena mayoritas kiriman ada di SLA 2 hari).</p>
+                        <p style="margin-top: 4px;"><strong>Jika menggunakan weighted average:</strong><br>
+                        <code>((5.000 × 2) + (4.000 × 2) + (3.000 × 2) + (50 × 7)) / 12.050 = 24.350 / 12.050 = 2,02 hari</code><br>
+                        Hasil <strong>2,02 hari</strong> jauh lebih realistis untuk dijadikan benchmark/pembanding.</p>
+                    </div>
+
+                    <div>
+                        <strong style="color: var(--primary);">5. Kenapa Tidak Langsung Pakai SLA Max Terbesar?</strong>
+                        <p style="margin-top: 4px;">Kalau langsung memakai SLA max terbesar dari seluruh kecamatan di bawah TLC tersebut, benchmark bisa jadi terlalu longgar.</p>
+                        <p style="margin-top: 4px;">Misal dalam satu TLC tujuan memiliki kecamatan dengan SLA: <code>2, 2, 2, 2, 7</code>.<br>
+                        Kalau benchmark yang dipakai hanya <strong>7</strong> (karena ada Kepulauan Seribu), maka P95 Aktual = <strong>5 hari</strong> akan terlihat masih aman ("SLA Masih Sesuai"). Padahal mayoritas area kecamatan (99% kiriman) sebenarnya berjalan dengan SLA existing 2 hari, yang berarti secara operasional pengiriman sudah sangat lambat.</p>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Data JS first, then Application logic -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
