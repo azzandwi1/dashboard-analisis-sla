@@ -353,6 +353,37 @@
                 </div>
             </div>
 
+            <!-- Panduan Membaca Dashboard (User Guide) -->
+            <section class="visual-card" style="margin-bottom: 24px; padding: 20px; border-left: 5px solid var(--primary); background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-input) 100%);">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                    <svg style="width: 20px; height: 20px; color: var(--primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 111.063.852l-.708 2.836a.75.75 0 001.063.852l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                    </svg>
+                    <h2 class="card-title" style="font-size: 1rem; margin: 0; font-weight: 600;">Panduan Cepat Membaca Grafik & Data</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                    <!-- Bagian 1: Cara Membaca Grafik -->
+                    <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
+                        <strong style="color: var(--text-primary); display: block; margin-bottom: 8px;">📊 Elemen Visual pada Grafik:</strong>
+                        <ul style="padding-left: 18px; margin: 0; list-style-type: disc; display: flex; flex-direction: column; gap: 6px;">
+                            <li><span style="display: inline-block; width: 24px; height: 10px; background-color: rgba(134, 40, 128, 0.15); border: 1px solid rgba(134, 40, 128, 0.4); margin-right: 6px; border-radius: 2px; vertical-align: middle;"></span><strong>Rentang SLA (Kotak Transparan Ungu):</strong> Menunjukkan batas minimum hingga maksimum SLA Master yang berlaku untuk rute tersebut.</li>
+                            <li><span style="display: inline-block; width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; margin-right: 6px; vertical-align: middle;"></span><strong>Titik Hijau (Circle):</strong> Nilai pencapaian **P90 SLA Aktual** (90% pengiriman selesai di bawah waktu ini).</li>
+                            <li><span style="display: inline-block; width: 8px; height: 8px; background-color: #EE6825; transform: rotate(45deg); margin-right: 6px; vertical-align: middle; margin-left: 1px;"></span><strong>Titik Oranye (Diamond):</strong> Nilai pencapaian **P95 SLA Aktual** (95% pengiriman selesai di bawah waktu ini).</li>
+                            <li><em>Catatan Over-SLA:</em> Jika titik hijau atau oranye berada di **sebelah kanan** kotak ungu, artinya rute tersebut melanggar SLA (terlambat).</li>
+                        </ul>
+                    </div>
+                    <!-- Bagian 2: Definisi P90 & P95 -->
+                    <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
+                        <strong style="color: var(--text-primary); display: block; margin-bottom: 8px;">⏱️ Apa itu P90 dan P95 SLA Aktual?</strong>
+                        <ul style="padding-left: 18px; margin: 0; list-style-type: disc; display: flex; flex-direction: column; gap: 6px;">
+                            <li><strong>P90 SLA Aktual</strong> adalah nilai SLA di mana **90%** pengiriman selesai pada atau sebelum angka itu.</li>
+                            <li><strong>P95 SLA Aktual</strong> adalah nilai SLA di mana **95%** pengiriman selesai pada atau sebelum angka itu.</li>
+                            <li><strong>Contoh Sederhana:</strong> Jika P90 = **3 hari**, artinya 90 dari 100 pengiriman selesai maksimal 3 hari. Jika P95 = **5 hari**, artinya 95 dari 100 pengiriman selesai maksimal 5 hari.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
             <!-- KPI Cards -->
             <section class="kpi-grid">
                 <!-- KPI 1: Total Rute -->
