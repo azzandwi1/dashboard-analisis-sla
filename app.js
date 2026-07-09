@@ -282,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
         guideToggleBar.addEventListener('click', () => {
             const isHidden = window.getComputedStyle(guideContent).display === 'none';
             if (isHidden) {
-                guideContent.style.display = 'grid';
+                guideContent.style.display = 'flex';
                 guideToggleIcon.textContent = '[ Tutup ]';
             } else {
                 guideContent.style.display = 'none';

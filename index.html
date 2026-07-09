@@ -347,7 +347,7 @@
         </aside>
 
         <!-- Main Dashboard Panel -->
-        <main class="main-panel" style="position: relative;">
+        <main class="main-panel" style="position: relative; z-index: 10;">
             <!-- Premium Sidebar Toggle Button -->
             <button id="toggle-sidebar-btn" class="toggle-sidebar-btn-premium" aria-label="Toggle filter sidebar" style="position: absolute; top: 24px; left: -15px; width: 30px; height: 30px; border-radius: 50%; background-color: var(--bg-card); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; color: var(--text-primary); transition: left var(--transition-normal) ease, background-color var(--transition-fast) ease, border-color var(--transition-fast) ease;">
                 <svg style="width: 16px; height: 16px; transition: transform var(--transition-normal) ease;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
@@ -363,36 +363,91 @@
                 </div>
             </div>
 
-            <!-- Panduan Membaca Dashboard (User Guide) -->
-            <section class="visual-card" style="margin-bottom: 24px; padding: 16px 20px; border-left: 5px solid var(--primary); background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-input) 100%); min-height: auto !important; gap: 0;">
-                <div id="guide-toggle-bar" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
+            <!-- Combined Guide & Methodology Card (Collapsible) -->
+            <section class="table-card notes-card" style="margin-bottom: 24px;">
+                <div class="card-title-bar" style="cursor: pointer; user-select: none;" id="guide-toggle-bar">
+                    <h2 class="card-title" style="display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 600; margin: 0;">
                         <svg style="width: 20px; height: 20px; color: var(--primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 111.063.852l-.708 2.836a.75.75 0 001.063.852l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
                         </svg>
-                        <h2 class="card-title" style="font-size: 1rem; margin: 0; font-weight: 600;">Panduan Cepat Membaca Grafik & Data</h2>
-                    </div>
+                        Panduan Membaca Dashboard & Metodologi SLA
+                    </h2>
                     <span id="guide-toggle-icon" style="font-weight: 600; color: var(--primary); font-size: 0.9rem; transition: transform var(--transition-fast);">[ Buka ]</span>
                 </div>
-                <div id="guide-content" style="display: none; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 16px;">
-                    <!-- Bagian 1: Cara Membaca Grafik -->
-                    <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
-                        <strong style="color: var(--text-primary); display: block; margin-bottom: 8px;">📊 Elemen Visual pada Grafik:</strong>
-                        <ul style="padding-left: 18px; margin: 0; list-style-type: disc; display: flex; flex-direction: column; gap: 6px;">
+                
+                <div id="guide-content" style="display: none; flex-direction: column; gap: 20px; margin-top: 12px; border-top: 1px solid var(--border-color); padding-top: 16px; font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary);">
+                    
+                    <!-- Cara Membaca Grafik -->
+                    <div style="background: rgba(134, 40, 128, 0.03); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--primary);">
+                        <strong style="color: var(--text-primary); display: block; margin-bottom: 8px; font-size: 0.9rem;">📊 Elemen Visual pada Grafik:</strong>
+                        <ul style="padding-left: 18px; margin: 0; list-style-type: disc; display: flex; flex-direction: column; gap: 8px;">
                             <li><span style="display: inline-block; width: 24px; height: 10px; background-color: rgba(134, 40, 128, 0.15); border: 1px solid rgba(134, 40, 128, 0.4); margin-right: 6px; border-radius: 2px; vertical-align: middle;"></span><strong>Rentang SLA (Kotak Transparan Ungu):</strong> Menunjukkan batas minimum hingga maksimum SLA Master yang berlaku untuk rute tersebut.</li>
                             <li><span style="display: inline-block; width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; margin-right: 6px; vertical-align: middle;"></span><strong>Titik Hijau (Circle):</strong> Nilai pencapaian <strong>P90 SLA Aktual</strong> (90% pengiriman selesai di bawah waktu ini).</li>
                             <li><span style="display: inline-block; width: 8px; height: 8px; background-color: #EE6825; transform: rotate(45deg); margin-right: 6px; vertical-align: middle; margin-left: 1px;"></span><strong>Titik Oranye (Diamond):</strong> Nilai pencapaian <strong>P95 SLA Aktual</strong> (95% pengiriman selesai di bawah waktu ini).</li>
                             <li><em>Catatan Over-SLA:</em> Jika titik hijau atau oranye berada di <strong>sebelah kanan</strong> kotak ungu, artinya rute tersebut melanggar SLA (terlambat).</li>
                         </ul>
                     </div>
-                    <!-- Bagian 2: Definisi P90 & P95 -->
-                    <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
-                        <strong style="color: var(--text-primary); display: block; margin-bottom: 8px;">⏱️ Apa itu P90 dan P95 SLA Aktual?</strong>
-                        <ul style="padding-left: 18px; margin: 0; list-style-type: disc; display: flex; flex-direction: column; gap: 6px;">
-                            <li><strong>P90 SLA Aktual</strong> adalah nilai SLA di mana <strong>90%</strong> pengiriman selesai pada atau sebelum angka itu.</li>
-                            <li><strong>P95 SLA Aktual</strong> adalah nilai SLA di mana <strong>95%</strong> pengiriman selesai pada atau sebelum angka itu.</li>
-                            <li><strong>Contoh Sederhana:</strong> Jika P90 = <strong>3 hari</strong>, artinya 90 dari 100 pengiriman selesai maksimal 3 hari. Jika P95 = <strong>5 hari</strong>, artinya 95 dari 100 pengiriman selesai maksimal 5 hari.</li>
-                        </ul>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        <!-- Disclaimer Rute TLC -->
+                        <div style="background: rgba(255,255,255,0.02); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary); display: block; margin-bottom: 6px;">1. Disclaimer Rute TLC</strong>
+                            <p style="margin: 0;">Dashboard ini membaca rute pada level <strong>TLC Asal → TLC Tujuan</strong>. Sementara SLA bisa tersimpan lebih detail pada level <strong>TLC Asal → Kecamatan Tujuan</strong>. Karena itu, ketika SLA diringkas ke level TLC tujuan, pendekatan yang dipakai adalah <em>weighted average</em> (rata-rata tertimbang) agar hasilnya tetap mewakili komposisi AWB per kecamatan.</p>
+                        </div>
+
+                        <!-- Apa itu P90 dan P95 SLA Aktual -->
+                        <div style="background: rgba(255,255,255,0.02); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary); display: block; margin-bottom: 6px;">2. Apa itu P90 dan P95 SLA Aktual?</strong>
+                            <ul style="padding-left: 18px; margin: 0 0 6px 0; list-style-type: disc; display: flex; flex-direction: column; gap: 4px;">
+                                <li><strong>P90 SLA Aktual</strong> adalah nilai SLA di mana <strong>90%</strong> pengiriman selesai pada atau sebelum angka itu.</li>
+                                <li><strong>P95 SLA Aktual</strong> adalah nilai SLA di mana <strong>95%</strong> pengiriman selesai pada atau sebelum angka itu.</li>
+                            </ul>
+                            <p style="margin: 0;"><em>Contoh Sederhana:</em> Jika P90 = <strong>3 hari</strong>, artinya 90 dari 100 pengiriman selesai maksimal 3 hari. Jika P95 = <strong>5 hari</strong>, artinya 95 dari 100 pengiriman selesai maksimal 5 hari.</p>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        <!-- Kenapa Memakai Weighted Average -->
+                        <div style="background: rgba(255,255,255,0.02); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <strong style="color: var(--primary); display: block; margin-bottom: 6px;">3. Kenapa Memakai Weighted Average?</strong>
+                                <p style="margin: 0 0 8px 0;">Dalam analisa ini, <em>weighted average</em> lebih representatif karena setiap kecamatan tujuan memiliki volume AWB yang berbeda. Kecamatan dengan volume kiriman besar seharusnya punya pengaruh lebih besar dibanding kecamatan dengan volume kecil.</p>
+                                <p style="margin: 0 0 8px 0;">Jika memakai rata-rata biasa, semua kecamatan dianggap sama besar, padahal kondisi operasional nyatanya tidak seperti itu.</p>
+                            </div>
+                            <code style="display: block; background-color: var(--bg-input); padding: 8px; border-radius: 6px; font-family: monospace; font-size: 0.8rem; border: 1px solid var(--border-color); color: var(--primary); text-align: center;">
+                                Weighted Average = Σ(nilai × bobot) / Σ(bobot)
+                            </code>
+                        </div>
+
+                        <!-- Contoh Sederhana Perhitungan -->
+                        <div style="background: var(--bg-input); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--primary);">
+                            <strong style="color: var(--primary); display: block; margin-bottom: 4px;">Contoh Sederhana Perhitungan:</strong>
+                            <p style="margin: 0 0 6px 0;">Misal ada 2 kecamatan tujuan di bawah 1 TLC Tujuan:</p>
+                            <ul style="padding-left: 18px; margin: 0 0 8px 0; list-style-type: circle; display: flex; flex-direction: column; gap: 2px;">
+                                <li>Kecamatan A: AWB = 10.000, Max SLA = 2 hari</li>
+                                <li>Kecamatan B: AWB = 100, Max SLA = 10 hari</li>
+                            </ul>
+                            <p style="margin: 0 0 6px 0;"><strong>Rata-rata biasa:</strong> <code>(2 + 10) / 2 = 6 hari</code> (Hasil 6 hari ini menyesatkan, karena hampir semua kiriman sebenarnya menuju Kecamatan A yang SLA-nya 2 hari).</p>
+                            <p style="margin: 0;"><strong>Weighted average:</strong> <code>((10.000 × 2) + (100 × 10)) / 10.100 = 2,08 hari</code> (Hasil 2,08 hari jauh lebih mencerminkan kondisi operasional sebenarnya).</p>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        <!-- Kenapa Penting Untuk Analisa -->
+                        <div style="background: rgba(255,255,255,0.02); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary); display: block; margin-bottom: 6px;">4. Kenapa Penting Untuk Analisa SLA TLC?</strong>
+                            <p style="margin: 0 0 6px 0;">Di dashboard ini, Anda membandingkan: <strong>SLA</strong> vs <strong>P90/P95 SLA Aktual</strong> pada level <strong>TLC Asal → TLC Tujuan</strong>.</p>
+                            <p style="margin: 0 0 8px 0;">Sementara data SLA bisa berasal dari level yang lebih detail, misalnya TLC Asal -> Kecamatan Tujuan. Dalam satu area TLC tujuan bisa ada banyak kecamatan dengan SLA berbeda.</p>
+                            <p style="margin: 0;"><strong>Jika menggunakan rata-rata biasa:</strong> <code>(2 + 2 + 2 + 7) / 4 = 3,25 hari</code> (kurang akurat).<br><strong>Jika menggunakan weighted average:</strong> <code>((5000×2) + (4000×2) + (3000×2) + (50×7)) / 12.050 = 2,02 hari</code> (lebih realistis untuk pembanding).</p>
+                        </div>
+
+                        <!-- Kenapa Tidak Langsung Pakai SLA Max Terbesar -->
+                        <div style="background: rgba(255,255,255,0.02); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary); display: block; margin-bottom: 6px;">5. Kenapa Tidak Langsung Pakai SLA Max Terbesar?</strong>
+                            <p style="margin: 0 0 8px 0;">Kalau langsung memakai SLA max terbesar dari seluruh kecamatan di bawah TLC tersebut, benchmark bisa jadi terlalu longgar.</p>
+                            <p style="margin: 0;">Misal satu TLC tujuan memiliki kecamatan dengan SLA: <code>2, 2, 2, 2, 7</code>.<br>
+                            Kalau benchmark yang dipakai hanya <strong>7</strong> (karena ada Kepulauan Seribu), maka P95 Aktual = <strong>5 hari</strong> akan terlihat masih aman ("SLA Masih Sesuai"). Padahal mayoritas area kecamatan (99% kiriman) sebenarnya berjalan dengan SLA 2 hari, yang berarti secara operasional pengiriman sudah sangat lambat.</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -537,90 +592,6 @@
                 </div>
             </section>
 
-            <!-- Notes & Methodology Card (Collapsible) -->
-            <section class="table-card notes-card" style="margin-top: 8px;">
-                <div class="card-title-bar" style="cursor: pointer;" id="notes-toggle-bar">
-                    <h2 class="card-title" style="display: flex; align-items: center; gap: 8px;">
-                        <svg style="width: 20px; height: 20px; color: var(--primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 1 1 1.063 1.063L12 12.75 11.25 13.5m0-6H12m10.5 4.5a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                        Catatan Metodologi: P90, P95 & Weighted Average
-                    </h2>
-                    <span id="notes-toggle-icon" style="font-weight: 600; color: var(--primary); font-size: 0.9rem; transition: transform var(--transition-fast); user-select: none;">[ Buka ]</span>
-                </div>
-                <div id="notes-content" style="display: none; flex-direction: column; gap: 16px; margin-top: 12px; border-top: 1px solid var(--border-color); padding-top: 16px; font-size: 0.875rem; line-height: 1.6; color: var(--text-secondary);">
-                    
-                    <div>
-                        <strong style="color: var(--primary);">1. Disclaimer Rute TLC</strong>
-                        <p style="margin-top: 4px;">Dashboard ini membaca rute pada level <strong>TLC Asal → TLC Tujuan</strong>. Sementara SLA bisa tersimpan lebih detail pada level <strong>TLC Asal → Kecamatan Tujuan</strong>. Karena itu, ketika SLA diringkas ke level TLC tujuan, pendekatan yang dipakai adalah <em>weighted average</em> (rata-rata tertimbang) agar hasilnya tetap mewakili komposisi AWB per kecamatan.</p>
-                    </div>
-
-                    <div>
-                        <strong style="color: var(--primary);">2. Apa itu P90 dan P95 SLA Aktual?</strong>
-                        <ul style="margin-top: 4px; padding-left: 20px; list-style-type: disc;">
-                            <li><strong>P90 SLA Aktual</strong> adalah nilai SLA di mana 90% pengiriman selesai pada atau sebelum angka itu.</li>
-                            <li><strong>P95 SLA Aktual</strong> adalah nilai SLA di mana 95% pengiriman selesai pada atau sebelum angka itu.</li>
-                        </ul>
-                        <p style="margin-top: 6px;"><em>Contoh sederhana:</em> Jika P90 = 3 hari, artinya 90 dari 100 pengiriman selesai maksimal 3 hari. Jika P95 = 5 hari, artinya 95 dari 100 pengiriman selesai maksimal 5 hari.</p>
-                    </div>
-
-                    <div>
-                        <strong style="color: var(--primary);">3. Kenapa Memakai Weighted Average (Rata-rata Tertimbang)?</strong>
-                        <p style="margin-top: 4px;">Dalam analisa ini, <em>weighted average</em> lebih representatif daripada rata-rata biasa (<em>simple average</em>), karena setiap kecamatan tujuan memiliki volume AWB yang berbeda. Kecamatan dengan volume kiriman besar seharusnya punya pengaruh lebih besar dibanding kecamatan dengan volume kecil.</p>
-                        <p style="margin-top: 4px;">Jika memakai rata-rata biasa, semua kecamatan dianggap sama besar, padahal kondisi operasional nyatanya tidak seperti itu.</p>
-                        
-                        <p style="margin-top: 8px; font-weight: 500; color: var(--text-primary);">Rumus Weighted Average:</p>
-                        <code style="display: block; background-color: var(--bg-input); padding: 8px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; margin-top: 4px; border: 1px solid var(--border-color); color: var(--primary);">
-                            Weighted Average = Σ(nilai × bobot) / Σ(bobot)
-                        </code>
-                        <p style="margin-top: 4px;">Di dashboard ini, bobot yang dipakai adalah <strong>Total AWB</strong>.</p>
-                    </div>
-
-                    <div style="background-color: var(--bg-input); padding: 16px; border-radius: 8px; border-left: 4px solid var(--primary);">
-                        <strong style="color: var(--primary);">Contoh Sederhana Perhitungan:</strong>
-                        <p style="margin-top: 6px;">Misal ada 2 kecamatan tujuan di bawah 1 TLC Tujuan:</p>
-                        <ul style="padding-left: 20px; margin-top: 4px; list-style-type: circle;">
-                            <li>Kecamatan A: AWB = 10.000, Max SLA = 2 hari</li>
-                            <li>Kecamatan B: AWB = 100, Max SLA = 10 hari</li>
-                        </ul>
-                        <p style="margin-top: 8px;"><strong>Jika menggunakan rata-rata biasa:</strong><br>
-                        <code>(2 + 10) / 2 = 6 hari</code><br>
-                        <span style="color: var(--accent); font-weight: 500;">Hasil 6 hari ini menyesatkan</span>, karena hampir semua kiriman (99%) sebenarnya menuju Kecamatan A yang SLA-nya hanya 2 hari.</p>
-                        
-                        <p style="margin-top: 8px;"><strong>Jika menggunakan weighted average (rata-rata tertimbang):</strong><br>
-                        <code>((10.000 × 2) + (100 × 10)) / (10.000 + 100) = 21.000 / 10.100 = 2,08 hari</code><br>
-                        Hasil <strong>2,08 hari</strong> jauh lebih mencerminkan kondisi operasional sebenarnya.</p>
-                    </div>
-
-                    <div>
-                        <strong style="color: var(--primary);">4. Kenapa Penting Untuk Analisa SLA TLC?</strong>
-                        <p style="margin-top: 4px;">Di dashboard ini, Anda membandingkan: <strong>SLA</strong> vs <strong>P90/P95 SLA Aktual</strong> pada level <strong>TLC Asal → TLC Tujuan</strong>.</p>
-                        <p style="margin-top: 4px;">Sementara data SLA bisa berasal dari level yang lebih detail, misalnya TLC Asal → Kecamatan Tujuan. Dalam satu area TLC tujuan bisa ada banyak kecamatan dengan SLA berbeda.</p>
-                        
-                        <p style="margin-top: 8px; font-weight: 500; color: var(--text-primary);">Contoh Kasus Rute TLC:</p>
-                        <p style="margin-top: 4px;">Di bawah TLC Jakarta Barat (TLC tujuan yang sama), terdapat beberapa kecamatan tujuan:</p>
-                        <ul style="padding-left: 20px; list-style-type: square;">
-                            <li>Kecamatan Cengkareng: AWB = 5.000, Max SLA = 2 hari</li>
-                            <li>Kecamatan Kalideres: AWB = 4.000, Max SLA = 2 hari</li>
-                            <li>Kecamatan Kapuk: AWB = 3.000, Max SLA = 2 hari</li>
-                            <li>Kecamatan Kepulauan Seribu: AWB = 50, Max SLA = 7 hari</li>
-                        </ul>
-                        <p style="margin-top: 8px;"><strong>Jika menggunakan rata-rata biasa:</strong><br>
-                        <code>(2 + 2 + 2 + 7) / 4 = 3,25 hari</code> (kurang akurat karena mayoritas kiriman ada di SLA 2 hari).</p>
-                        <p style="margin-top: 4px;"><strong>Jika menggunakan weighted average:</strong><br>
-                        <code>((5.000 × 2) + (4.000 × 2) + (3.000 × 2) + (50 × 7)) / 12.050 = 24.350 / 12.050 = 2,02 hari</code><br>
-                        Hasil <strong>2,02 hari</strong> jauh lebih realistis untuk dijadikan benchmark/pembanding.</p>
-                    </div>
-
-                    <div>
-                        <strong style="color: var(--primary);">5. Kenapa Tidak Langsung Pakai SLA Max Terbesar?</strong>
-                        <p style="margin-top: 4px;">Kalau langsung memakai SLA max terbesar dari seluruh kecamatan di bawah TLC tersebut, benchmark bisa jadi terlalu longgar.</p>
-                        <p style="margin-top: 4px;">Misal dalam satu TLC tujuan memiliki kecamatan dengan SLA: <code>2, 2, 2, 2, 7</code>.<br>
-                        Kalau benchmark yang dipakai hanya <strong>7</strong> (karena ada Kepulauan Seribu), maka P95 Aktual = <strong>5 hari</strong> akan terlihat masih aman ("SLA Masih Sesuai"). Padahal mayoritas area kecamatan (99% kiriman) sebenarnya berjalan dengan SLA 2 hari, yang berarti secara operasional pengiriman sudah sangat lambat.</p>
-                    </div>
-
-                </div>
-            </section>
         </main>
     </div>
 
