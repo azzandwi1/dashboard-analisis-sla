@@ -385,14 +385,14 @@
             <!-- Chart Card -->
             <section class="visual-card">
                 <div class="card-title-bar">
-                    <h2 class="card-title">Perbandingan SLA Existing vs SLA Aktual (P90 & P95)</h2>
+                    <h2 class="card-title">Perbandingan SLA vs SLA Aktual (P90 & P95)</h2>
                     <span style="color:var(--text-muted); font-size:0.8rem;">Menampilkan top rute terurut (TLC Asal → TLC Tujuan)</span>
                 </div>
                 <!-- Custom HTML Legend (Always visible, does not scroll) -->
                 <div class="chart-legend">
                     <div class="legend-item">
                         <span class="legend-color range"></span>
-                        <span>Rentang SLA Existing</span>
+                        <span>Rentang SLA</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-color p90"></span>
@@ -448,8 +448,8 @@
                                 <th>CABANG UTAMA TUJUAN</th>
                                 <th>TLC Tujuan</th>
                                 <th style="text-align:right;">Total AWB</th>
-                                <th style="text-align:center;">SLA Min Existing</th>
-                                <th style="text-align:center;">SLA Max Existing</th>
+                                <th style="text-align:center;">SLA Min</th>
+                                <th style="text-align:center;">SLA Max</th>
                                 <th style="text-align:center;">P90 SLA Aktual</th>
                                 <th style="text-align:center;">P95 SLA Aktual</th>
                                 <th style="text-align:center;">Gap SLA P90</th>
@@ -486,7 +486,7 @@
                     
                     <div>
                         <strong style="color: var(--primary);">1. Disclaimer Rute TLC</strong>
-                        <p style="margin-top: 4px;">Dashboard ini membaca rute pada level <strong>TLC Asal → TLC Tujuan</strong>. Sementara SLA existing bisa tersimpan lebih detail pada level <strong>TLC Asal → Kecamatan Tujuan</strong>. Karena itu, ketika SLA existing diringkas ke level TLC tujuan, pendekatan yang dipakai adalah <em>weighted average</em> (rata-rata tertimbang) agar hasilnya tetap mewakili komposisi AWB per kecamatan.</p>
+                        <p style="margin-top: 4px;">Dashboard ini membaca rute pada level <strong>TLC Asal → TLC Tujuan</strong>. Sementara SLA bisa tersimpan lebih detail pada level <strong>TLC Asal → Kecamatan Tujuan</strong>. Karena itu, ketika SLA diringkas ke level TLC tujuan, pendekatan yang dipakai adalah <em>weighted average</em> (rata-rata tertimbang) agar hasilnya tetap mewakili komposisi AWB per kecamatan.</p>
                     </div>
 
                     <div>
@@ -528,8 +528,8 @@
 
                     <div>
                         <strong style="color: var(--primary);">4. Kenapa Penting Untuk Analisa SLA TLC?</strong>
-                        <p style="margin-top: 4px;">Di dashboard ini, Anda membandingkan: <strong>SLA Existing</strong> vs <strong>P90/P95 SLA Aktual</strong> pada level <strong>TLC Asal → TLC Tujuan</strong>.</p>
-                        <p style="margin-top: 4px;">Sementara data SLA existing bisa berasal dari level yang lebih detail, misalnya TLC Asal → Kecamatan Tujuan. Dalam satu area TLC tujuan bisa ada banyak kecamatan dengan SLA berbeda.</p>
+                        <p style="margin-top: 4px;">Di dashboard ini, Anda membandingkan: <strong>SLA</strong> vs <strong>P90/P95 SLA Aktual</strong> pada level <strong>TLC Asal → TLC Tujuan</strong>.</p>
+                        <p style="margin-top: 4px;">Sementara data SLA bisa berasal dari level yang lebih detail, misalnya TLC Asal → Kecamatan Tujuan. Dalam satu area TLC tujuan bisa ada banyak kecamatan dengan SLA berbeda.</p>
                         
                         <p style="margin-top: 8px; font-weight: 500; color: var(--text-primary);">Contoh Kasus Rute TLC:</p>
                         <p style="margin-top: 4px;">Di bawah TLC Jakarta Barat (TLC tujuan yang sama), terdapat beberapa kecamatan tujuan:</p>
@@ -550,7 +550,7 @@
                         <strong style="color: var(--primary);">5. Kenapa Tidak Langsung Pakai SLA Max Terbesar?</strong>
                         <p style="margin-top: 4px;">Kalau langsung memakai SLA max terbesar dari seluruh kecamatan di bawah TLC tersebut, benchmark bisa jadi terlalu longgar.</p>
                         <p style="margin-top: 4px;">Misal dalam satu TLC tujuan memiliki kecamatan dengan SLA: <code>2, 2, 2, 2, 7</code>.<br>
-                        Kalau benchmark yang dipakai hanya <strong>7</strong> (karena ada Kepulauan Seribu), maka P95 Aktual = <strong>5 hari</strong> akan terlihat masih aman ("SLA Masih Sesuai"). Padahal mayoritas area kecamatan (99% kiriman) sebenarnya berjalan dengan SLA existing 2 hari, yang berarti secara operasional pengiriman sudah sangat lambat.</p>
+                        Kalau benchmark yang dipakai hanya <strong>7</strong> (karena ada Kepulauan Seribu), maka P95 Aktual = <strong>5 hari</strong> akan terlihat masih aman ("SLA Masih Sesuai"). Padahal mayoritas area kecamatan (99% kiriman) sebenarnya berjalan dengan SLA 2 hari, yang berarti secara operasional pengiriman sudah sangat lambat.</p>
                     </div>
 
                 </div>

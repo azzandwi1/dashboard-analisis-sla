@@ -902,7 +902,7 @@ function renderChart() {
     const hoverTextP90 = chartData.map(row => 
         `<b>Rute:</b> ${row['TLC Asal']} (${row['CABANG UTAMA ASAL']}) → ${row['TLC Tujuan']} (${row['CABANG UTAMA TUJUAN']})<br>` +
         `<b>Total AWB:</b> ${row['Total AWB'].toLocaleString('id-ID')}<br>` +
-        `<b>SLA Existing:</b> ${row['Weighted Avg SLA Min']} - ${row['Weighted Avg SLA Max']} hari<br>` +
+        `<b>SLA:</b> ${row['Weighted Avg SLA Min']} - ${row['Weighted Avg SLA Max']} hari<br>` +
         `<b>P90 Aktual:</b> ${row['P90 SLA Aktual']} hari (Gap: ${row['Gap SLA P90'].toFixed(1)} hari) [${row['Status Validasi SLA P90']}]<br>` +
         `<b>P95 Aktual:</b> ${row['P95 SLA Aktual']} hari (Gap: ${row['Gap SLA P95'].toFixed(1)} hari) [${row['Status Validasi SLA P95']}]`
     );
@@ -910,7 +910,7 @@ function renderChart() {
     const hoverTextP95 = chartData.map(row => 
         `<b>Rute:</b> ${row['TLC Asal']} (${row['CABANG UTAMA ASAL']}) → ${row['TLC Tujuan']} (${row['CABANG UTAMA TUJUAN']})<br>` +
         `<b>Total AWB:</b> ${row['Total AWB'].toLocaleString('id-ID')}<br>` +
-        `<b>SLA Existing:</b> ${row['Weighted Avg SLA Min']} - ${row['Weighted Avg SLA Max']} hari<br>` +
+        `<b>SLA:</b> ${row['Weighted Avg SLA Min']} - ${row['Weighted Avg SLA Max']} hari<br>` +
         `<b>P90 Aktual:</b> ${row['P90 SLA Aktual']} hari (Gap: ${row['Gap SLA P90'].toFixed(1)} hari) [${row['Status Validasi SLA P90']}]<br>` +
         `<b>P95 Aktual:</b> ${row['P95 SLA Aktual']} hari (Gap: ${row['Gap SLA P95'].toFixed(1)} hari) [${row['Status Validasi SLA P95']}]`
     );
@@ -929,7 +929,7 @@ function renderChart() {
                 width: 1
             }
         },
-        name: 'Rentang SLA Existing',
+        name: 'Rentang SLA',
         hoverinfo: 'skip',
         showlegend: false
     };
