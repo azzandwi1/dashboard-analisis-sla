@@ -273,6 +273,24 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebarOverlay.classList.remove('show');
     });
 
+    // Collapsible Guide Handler
+    const guideToggleBar = document.getElementById('guide-toggle-bar');
+    const guideContent = document.getElementById('guide-content');
+    const guideToggleIcon = document.getElementById('guide-toggle-icon');
+
+    if (guideToggleBar && guideContent) {
+        guideToggleBar.addEventListener('click', () => {
+            const isHidden = window.getComputedStyle(guideContent).display === 'none';
+            if (isHidden) {
+                guideContent.style.display = 'grid';
+                guideToggleIcon.textContent = '[ Tutup ]';
+            } else {
+                guideContent.style.display = 'none';
+                guideToggleIcon.textContent = '[ Buka ]';
+            }
+        });
+    }
+
     // Collapsible Notes Handler
     const notesToggleBar = document.getElementById('notes-toggle-bar');
     const notesContent = document.getElementById('notes-content');
