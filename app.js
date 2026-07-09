@@ -13,7 +13,7 @@ const body = document.body;
 // Multiselect Instances
 let msRegionAsal, msCabangAsal, msTlcAsal;
 let msRegionTujuan, msCabangTujuan, msTlcTujuan;
-let msTipeKiriman, msService, msStatusP95;
+let msTipeKiriman, msJenisKiriman, msService, msStatusP95;
 
 // Tag Input Variables
 let selectedCustomers = [];
@@ -48,6 +48,7 @@ let originHierarchy = {};
 let destHierarchy = {};
 let uniqueServices = new Set();
 let uniqueTipeKiriman = new Set();
+let uniqueJenisKiriman = new Set();
 let uniqueCustomers = new Set();
 
 // Class definition for Custom Multiselect Dropdown
@@ -372,6 +373,7 @@ function setupFilters() {
 
         if (row['Service']) uniqueServices.add(row['Service']);
         if (row['Tipe Kiriman']) uniqueTipeKiriman.add(row['Tipe Kiriman']);
+        if (row['Jenis Kiriman']) uniqueJenisKiriman.add(row['Jenis Kiriman']);
         if (row['Nama Pelanggan']) uniqueCustomers.add(row['Nama Pelanggan']);
     });
 
@@ -397,6 +399,7 @@ function setupFilters() {
     msTlcTujuan = new MultiselectDropdown('ms-tlc-tujuan', 'Choose TLCs', applyFilters);
 
     msTipeKiriman = new MultiselectDropdown('ms-tipe-kiriman', 'Choose Types', applyFilters);
+    msJenisKiriman = new MultiselectDropdown('ms-jenis-kiriman', 'Choose Types', applyFilters);
     msService = new MultiselectDropdown('ms-service', 'Choose Services', applyFilters);
     msStatusP95 = new MultiselectDropdown('ms-status-p95', 'Choose Statuses', applyFilters);
 
@@ -404,6 +407,7 @@ function setupFilters() {
     msRegionAsal.setOptions(Object.keys(originHierarchy).sort());
     msRegionTujuan.setOptions(Object.keys(destHierarchy).sort());
     msTipeKiriman.setOptions(Array.from(uniqueTipeKiriman).sort());
+    msJenisKiriman.setOptions(Array.from(uniqueJenisKiriman).sort());
     msService.setOptions(Array.from(uniqueServices).sort());
     msStatusP95.setOptions(['SLA Masih Sesuai', 'SLA Terlalu Longgar', 'Perlu Penambahan SLA']);
 
@@ -591,6 +595,7 @@ function resetAllFilters() {
     updateCabangTujuanOptions();
 
     msTipeKiriman.clear();
+    msJenisKiriman.clear();
     msService.clear();
     msStatusP95.clear();
     
@@ -673,6 +678,7 @@ function applyFilters() {
     const selTlcsT = msTlcTujuan.getSelected();
 
     const selTypes = msTipeKiriman.getSelected();
+    const selJenis = msJenisKiriman.getSelected();
     const selServices = msService.getSelected();
     const selStatusP95 = msStatusP95.getSelected();
     const minAwb = parseInt(filterMinAwb.value) || 0;
@@ -689,9 +695,10 @@ function applyFilters() {
         if (selCabangsT.length > 0 && !selCabangsT.includes(row['CABANG UTAMA TUJUAN'])) return false;
         if (selTlcsT.length > 0 && !selTlcsT.includes(row['TLC Tujuan'])) return false;
 
-        // Service, type, and customer tags
+        // Service, type, jenis, and customer tags
         if (selServices.length > 0 && !selServices.includes(row['Service'])) return false;
         if (selTypes.length > 0 && !selTypes.includes(row['Tipe Kiriman'])) return false;
+        if (selJenis.length > 0 && !selJenis.includes(row['Jenis Kiriman'])) return false;
         if (selectedCustomers.length > 0 && !selectedCustomers.includes(row['Nama Pelanggan'])) return false;
 
         return true;
@@ -861,10 +868,17 @@ function renderChart() {
     chartData.reverse(); // Bottom to top rendering
 
     if (chartData.length === 0) {
+        Plotly.purge('sla-chart');
         document.getElementById('sla-chart').innerHTML = `<div style="display:flex; justify-content:center; align-items:center; height:100%; color:var(--text-muted);">Tidak ada data untuk rute yang dipilih.</div>`;
         document.getElementById('sla-chart-xaxis').style.display = 'none';
         return;
     } else {
+        // Clear custom message to prevent Plotly state corruption
+        const chartDiv = document.getElementById('sla-chart');
+        if (chartDiv && !chartDiv.querySelector('.plot-container')) {
+            Plotly.purge('sla-chart');
+            chartDiv.innerHTML = '';
+        }
         document.getElementById('sla-chart-xaxis').style.display = 'block';
     }
 

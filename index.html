@@ -204,6 +204,29 @@
                     </div>
                 </div>
 
+                <!-- Jenis Kiriman -->
+                <div class="filter-group">
+                    <span class="filter-label">JENIS KIRIMAN</span>
+                    <div class="multiselect-container" id="ms-jenis-kiriman">
+                        <div class="multiselect-trigger">
+                            <span class="multiselect-value">Choose options</span>
+                            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </div>
+                        <div class="multiselect-dropdown">
+                            <div class="multiselect-search-container">
+                                <input type="text" class="multiselect-search" placeholder="Cari jenis...">
+                            </div>
+                            <div class="multiselect-actions">
+                                <button class="ms-btn select-all">All</button>
+                                <button class="ms-btn clear-all">Clear</button>
+                            </div>
+                            <div class="multiselect-options"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Service -->
                 <div class="filter-group">
                     <span class="filter-label">SERVICE LAYANAN</span>
@@ -303,7 +326,7 @@
             <div class="top-bar">
                 <div>
                     <h1 class="dashboard-title">Dashboard Analisis SLA</h1>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">Tingkat Detail Rute: TLC Asal → TLC Tujuan (Agregat Rute)</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">Tingkat Detail Rute: TLC Asal → TLC Tujuan</p>
                 </div>
             </div>
 
@@ -362,7 +385,7 @@
             <!-- Chart Card -->
             <section class="visual-card">
                 <div class="card-title-bar">
-                    <h2 class="card-title">Perbandingan SLA Existing vs SLA Aktual Agregat (P90 & P95)</h2>
+                    <h2 class="card-title">Perbandingan SLA Existing vs SLA Aktual (P90 & P95)</h2>
                     <span style="color:var(--text-muted); font-size:0.8rem;">Menampilkan top rute terurut (TLC Asal → TLC Tujuan)</span>
                 </div>
                 <!-- Custom HTML Legend (Always visible, does not scroll) -->
@@ -390,7 +413,7 @@
             <!-- Table Card -->
             <section class="table-card">
                 <div class="table-controls">
-                    <h2 class="card-title">Data Detail Pencapaian Persentil SLA (Agregat TLC)</h2>
+                    <h2 class="card-title">Data Detail Pencapaian Persentil SLA</h2>
                     
                     <div style="display:flex; gap:12px; align-items:center; width:100%; max-width:600px; justify-content:flex-end;">
                         <!-- Table Search -->
