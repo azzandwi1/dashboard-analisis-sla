@@ -827,23 +827,40 @@ function updateKpis() {
     
     let totalAwbVal = 0;
     let needsSlaAddition = 0;
-    let sumP95 = 0;
+    const globalDayCounts = {};
 
     filteredRoutes.forEach(route => {
         totalAwbVal += route['Total AWB'] || 0;
         if (route['Status Validasi SLA P95'] === 'Perlu Penambahan SLA') {
             needsSlaAddition++;
         }
-        sumP95 += route['P95 SLA Aktual'] || 0;
+        
+        // Sum day counts across all filtered routes
+        if (route.dayCounts) {
+            for (const day in route.dayCounts) {
+                if (!globalDayCounts[day]) {
+                    globalDayCounts[day] = 0;
+                }
+                globalDayCounts[day] += route.dayCounts[day];
+            }
+        }
     });
 
-    // Compute simple arithmetic average of P95 across all filtered routes (route-level average)
-    const avgP95 = totalRute > 0 ? (sumP95 / totalRute) : 0.0;
+    // Compute global P95 over all combined filtered shipments (AWB-level)
+    const globalDayCountsArray = Object.keys(globalDayCounts).map(dayStr => {
+        const day = Number(dayStr);
+        return { day, count: globalDayCounts[day] };
+    }).sort((a, b) => a.day - b.day);
+
+    let globalP95 = 0;
+    if (globalDayCountsArray.length > 0) {
+        globalP95 = Math.round(calculatePercentile(globalDayCountsArray, 0.95) * 10) / 10;
+    }
 
     kpiTotalRute.textContent = totalRute.toLocaleString('id-ID');
     kpiTotalAwb.textContent = totalAwbVal.toLocaleString('id-ID');
     kpiPerluPenambahan.textContent = needsSlaAddition.toLocaleString('id-ID');
-    kpiPctOverSla.textContent = avgP95 > 0 ? `${avgP95.toFixed(1)} hari` : "0.0 hari";
+    kpiPctOverSla.textContent = globalP95 > 0 ? `${globalP95.toFixed(1)} hari` : "0.0 hari";
 
     // Warnings (only toggle on the warning count card now)
     const warningCard = kpiPerluPenambahan.closest('.kpi-card');
