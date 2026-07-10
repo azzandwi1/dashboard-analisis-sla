@@ -660,7 +660,9 @@ function resetAllFilters() {
 
 // REPLICATES DAX: ROUNDUP(x, 1)
 function roundup1(val) {
-    return Math.ceil(val * 10) / 10;
+    // Bersihkan precision error mikroskopis (seperti 2.0000000000000004) sebelum dibulatkan ke atas
+    const rounded = Math.round(val * 1e9) / 1e9;
+    return Math.ceil(rounded * 10) / 10;
 }
 
 // REPLICATES DAX: Gap SLA P95
