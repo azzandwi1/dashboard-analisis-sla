@@ -421,7 +421,7 @@
                         <!-- Contoh Sederhana Perhitungan -->
                         <div style="background: var(--bg-input); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--primary);">
                             <strong style="color: var(--primary); display: block; margin-bottom: 6px;">Contoh Sederhana Perhitungan:</strong>
-                            <p style="margin: 0 0 6px 0;">Misal di bawah 1 TLC Tujuan terdapat kecamatan-kecamatan tujuan dengan volume pengiriman berbeda:</p>
+                            <p style="margin: 0 0 6px 0;"><strong>Misal</strong> di bawah 1 TLC Tujuan terdapat kecamatan-kecamatan tujuan dengan volume pengiriman berbeda:</p>
                             <ul style="padding-left: 18px; margin: 0 0 8px 0; list-style-type: circle; display: flex; flex-direction: column; gap: 2px;">
                                 <li>Kecamatan Cengkareng: AWB = 5.000, SLA = 2 hari</li>
                                 <li>Kecamatan Kalideres: AWB = 4.000, SLA = 2 hari</li>
@@ -432,11 +432,11 @@
                             <p style="margin: 0;"><strong>Jika menggunakan weighted average:</strong> <code>((5000×2) + (4000×2) + (3000×2) + (50×7)) / 12.050 = 2,02 hari</code> (lebih realistis untuk pembanding).</p>
                         </div>
 
-                        <!-- Kenapa Tidak Langsung Pakai SLA Max Terbesar -->
+                        <!-- ... -->
                         <div style="background: rgba(255,255,255,0.02); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
                             <strong style="color: var(--primary); display: block; margin-bottom: 6px;">3. Kenapa Tidak Langsung Pakai SLA Max Terbesar?</strong>
                             <p style="margin: 0 0 8px 0;">Kalau langsung memakai SLA max terbesar dari seluruh kecamatan di bawah TLC tersebut, benchmark bisa jadi terlalu longgar.</p>
-                            <p style="margin: 0;">Misal satu TLC tujuan memiliki kecamatan dengan SLA: <code>2, 2, 2, 2, 7</code>.<br>
+                            <p style="margin: 0;"><strong>Misal</strong> satu TLC tujuan memiliki kecamatan dengan SLA: <code>2, 2, 2, 2, 7</code>.<br>
                             Kalau benchmark yang dipakai hanya <strong>7</strong> (karena ada Kepulauan Seribu), maka P95 Aktual = <strong>5 hari</strong> akan terlihat masih aman ("SLA Masih Sesuai"). Padahal mayoritas area kecamatan (99% kiriman) sebenarnya berjalan dengan SLA 2 hari, yang berarti secara operasional pengiriman sudah sangat lambat.</p>
                         </div>
                     </div>
